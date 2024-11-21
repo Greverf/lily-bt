@@ -14,6 +14,18 @@
 #define LOWER   1
 #define RAISE   2
 #define ADJUST  3
+#define TILDE  4
+
+/ {
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+
+        tri_layer {
+            if-layers = <1 2>;
+            then-layer = <3>;
+        };
+    };
+};
 
 / {
     keymap {
