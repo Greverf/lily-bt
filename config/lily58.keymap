@@ -29,7 +29,7 @@
                         &kp LGUI &kp RALT  &mo 1  &kp RSHFT  &kp SPACE  &mo 2  &kp LCTRL &kp trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            
         };
 
         lower_layer {
@@ -47,7 +47,7 @@
                                               &trans            &trans       &trans    &trans   &kp ENTER    &trans    &trans    &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            
         };
 
         raise_layer {
@@ -65,7 +65,7 @@
                         &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            
         };
 
         adjust_layer {
@@ -83,7 +83,7 @@
                         &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+            
         };
 
         tilde_layer {
@@ -101,7 +101,7 @@
                         &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
             >;
 
-            sensor-bindings = <&inc_dec_kp C_VOL_UP C_VOL_DN>;
+           
         };
     };
 };
