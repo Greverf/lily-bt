@@ -23,6 +23,14 @@
         mt: mod_tap {
             quick-tap-ms = <180>;     // Mejora respuesta en tap-hold
         };
+            quick_release: quick_release {
+            compatible = "zmk,behavior-hold-tap";
+            #binding-cells = <2>;
+            flavor = "tap-preferred";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            require-prior-idle-ms = <100>;
+        };
     };
 
     kscan: kscan {
