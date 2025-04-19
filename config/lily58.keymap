@@ -1,9 +1,7 @@
 /*
  * Copyright (c) 2020 The ZMK Contributors
- *
  * SPDX-License-Identifier: MIT
  */
-
 
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
@@ -14,23 +12,31 @@
 #define LOWER   1
 #define RAISE   2
 #define ADJUST  3
-#define TILDE  4
+#define TILDE   4
 
 / {
+    behaviors {
+        sk: sticky_key {
+            release-after-ms = <200>; // Evita teclas pegadas
+        };
+        mt: mod_tap {
+            quick-tap-ms = <180>;     // Mejora respuesta en tap-hold
+        };
+    };
+
     kscan: kscan {
         compatible = "zmk,kscan-gpio-matrix";
         diode-direction = "col2row";
+        debounce-press-ms = <5>;      // Optimizado para Bluetooth
+        debounce-release-ms = <10>;
         wakeup-source;
     };
-};
 
-/ {
     conditional_layers {
         compatible = "zmk,conditional-layers";
-
         tri_layer {
-            if-layers = <1 2>;
-            then-layer = <3>;
+            if-layers = <LOWER RAISE>;
+            then-layer = <ADJUST>;
         };
     };
 };
@@ -39,94 +45,59 @@
     keymap {
         compatible = "zmk,keymap";
 
+        // === Capa DEFAULT (Base) ===
         default_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |  ESC  |  1  |  2  |  3   |  4   |  5   |                   |  6   |  7    |  8    |  9   |   0   |   `   |
-// |  TAB  |  Q  |  W  |  E   |  R   |  T   |                   |  Y   |  U    |  I    |  O   |   P   |   -   |
-// |  CTRL |  A  |  S  |  D   |  F   |  G   |                   |  H   |  J    |  K    |  L   |   ;   |   '   |
-// | SHIFT |  Z  |  X  |  C   |  V   |  B   |   "["  |  |  "]"  |  N   |  M    |  ,    |  .   |   /   | SHIFT |
-//                     | ALT  | GUI  | LOWER|  SPACE |  | ENTER | RAISE| BSPC  | GUI   |
             bindings = <
-&none   &kp N1 &kp N2 &kp N3   &kp N4   &kp N5                     &kp N6 &kp N7   &kp N8    &kp N9  &kp N0   &kp INS
-&kp BSLH   &kp SQT  &kp COMMA  &kp DOT     &kp P    &kp Y                      &kp F  &kp G     &kp C     &kp R   &kp L    &kp FSLH
-&kp EQUAL &kp A  &kp O  &kp E    &kp U    &kp I                      &kp D  &kp H    &kp T     &kp N   &kp S &kp MINUS
-&kp GRAVE &kp SEMI  &kp Q  &kp J    &kp K    &kp X  &kp LBKT   &kp RBKT &kp B  &kp M    &kp W &kp V &kp Z &sl 4
-                        &kp LGUI &kp RALT  &mo 1  &kp RSHFT  &kp SPACE  &mo 2  &kp LCTRL &trans
+                &bt BT_CLR_ALL  &kp N1  &kp N2  &kp N3  &kp N4  &kp N5           &kp N6  &kp N7  &kp N8  &kp N9  &kp N0  &kp INS
+                &kp BSLH        &kp SQT &kp COMMA &kp DOT &kp P   &kp Y           &kp F   &kp G   &kp C   &kp R   &kp L   &kp FSLH
+                &kp EQUAL       &kp A   &kp O   &kp E   &kp U   &kp I             &kp D   &kp H   &kp T   &kp N   &kp S   &kp MINUS
+                &kp GRAVE       &kp SEMI &kp Q  &kp J   &kp K   &kp X  &kp LBKT  &kp RBKT &kp B   &kp M   &kp W   &kp V   &kp Z   &sl TILDE
+                                            &kp LGUI &kp RALT &mo LOWER &kp RSHFT &kp SPACE &mo RAISE &kp LCTRL &trans
             >;
-
-            
         };
 
+        // === Capa LOWER (Teclas de función y accesos directos) ===
         lower_layer {
-// ------------------------------------------------------------------------------------------------------------
-// | BTCLR | BT1 | BT2 |  BT3 |  BT4 |  BT5 |                   |      |       |       |      |       |       |
-// |  F1   |  F2 |  F3 |  F4  |  F5  |  F6  |                   |  F7  |  F8   |  F9   |  F10 |  F11  |  F12  |
-// |   `   |  !  |  @  |  #   |  $   |  %   |                   |  ^   |  &    |  *    |  (   |   )   |   ~   |
-// |       |     |     |      |      |      |        |  |       |      |  _    |  +    |  {   |   }   |  "|"  |
-//                     |      |      |      |        |  |       |      |       |       |
             bindings = <
-&kp F1     &kp F2           &kp F3            &kp F4            &kp F5       &kp F6                       &kp F7    &kp F8    &kp F9    &kp F10   &kp F11   &kp F12
-&none     &kp LS(LG(T))      &kp LA(SPACE)    &kp LC(F)       &kp LS(LG(S))    &kp LC(Y)                       &kp PG_UP    &kp HOME    &kp UP    &kp END   &kp CAPS   &none
-&kp ESC  &kp LGUI     &kp LALT            &kp LSHFT          &kp LCTRL   &kp RALT                    &kp PG_DN &kp LEFT  &kp DOWN &kp RIGHT  &kp DEL  &none
-&trans     &kp LC(Z)        &kp LC(X)         &kp LC(C)         &kp TAB  &kp LC(V)    &trans   &trans    &kp LC(BSPC)    &kp BSPC &kp INS  &kp K_APP  &none  &trans
-                                              &trans            &trans       &trans    &trans   &kp ENTER    &trans    &trans    &trans
+                &kp F11         &kp F1  &kp F2  &kp F3  &kp F4  &kp F5           &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &kp F12
+                &none           &kp LS(LG(T)) &kp LA(SPACE) &kp LC(F) &kp LS(LG(S)) &kp LC(Y) &kp PG_UP &kp HOME &kp UP &kp END &kp CAPS &none
+                &kp ESC         &kp LGUI &kp LALT &kp LSHFT &kp LCTRL &kp RALT     &kp PG_DN &kp LEFT &kp DOWN &kp RIGHT &kp DEL &none
+                &trans          &kp LC(Z) &kp LC(X) &kp LC(C) &kp TAB &kp LC(V)    &trans    &trans  &kp LC(BSPC) &kp BSPC &kp INS &kp K_APP &none &trans
+                                                      &trans &trans &trans &trans &kp ENTER &trans &trans &trans
             >;
-
-            
         };
 
+        // === Capa RAISE (Números y controles básicos) ===
         raise_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |       |     |     |      |      |      |                   |      |       |       |      |       |       |
-// |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |   7   |   8   |  9   |   0   |       |
-// |   F1  |  F2 |  F3 |  F4  |  F5  |  F6  |                   |      |   <-  |   v   |  ^   |  ->   |       |
-// |   F7  |  F8 |  F9 |  F10 |  F11 |  F12 |        |  |       |  +   |   -   |   =   |  [   |   ]   |   \   |
-//                     |      |      |      |        |  |       |      |       |       |
             bindings = <
-&none    &none &none &none  &none  &none                                &none    &none &none &none  &none  &none
-&none    &kp LG(N1) &kp LG(N2) &kp LG(N3)  &kp LG(N4)  &kp LG(N5)       &none    &none &none &none  &none  &none
-&none    &none &none &none  &none  &none                                &none    &none &none &none  &none  &none
-&none    &none &none &none  &none  &none      &none      &none          &none    &none &none &none  &none  &trans
-                        &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
+                &none           &kp LG(N1) &kp LG(N2) &kp LG(N3) &kp LG(N4) &kp LG(N5)   &none    &none &none &none &none &none
+                &none           &none      &none      &none      &none      &none        &none    &none &none &none &none &none
+                &none           &none      &none      &none      &none      &none        &none    &none &none &none &none &none
+                &none           &none      &none      &none      &none      &none  &none  &none    &none &none &none &none &trans
+                                                      &trans &trans &trans &trans &trans &trans &trans &trans
             >;
-
-            
         };
 
+        // === Capa ADJUST (Controles multimedia y Bluetooth) ===
         adjust_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |       |     |     |      |      |      |                   |      |       |       |      |       |       |
-// |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |   7   |   8   |  9   |   0   |       |
-// |   F1  |  F2 |  F3 |  F4  |  F5  |  F6  |                   |      |   <-  |   v   |  ^   |  ->   |       |
-// |   F7  |  F8 |  F9 |  F10 |  F11 |  F12 |        |  |       |  +   |   -   |   =   |  [   |   ]   |   \   |
-//                     |      |      |      |        |  |       |      |       |       |
             bindings = <
-&bt BT_CLR_ALL    &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                                 &none    &none &none &none  &none  &none
-&none    &kp LG(N1) &kp LG(N2) &kp LG(N3)  &kp LG(N4)  &kp LG(N5)       &none    &kp K_PWR &kp K_SLEEP  &kp C_RESET  &none  &none
-&none    &none &none &none  &none  &none                                &none    &kp C_PREV &kp C_PP &kp C_NEXT  &none  &none
-&none    &none &none &none  &none  &none      &none      &none          &none    &kp C_VOL_DN &kp C_PLAY &kp C_VOL_UP  &none  &trans
-                        &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
+                &bt BT_CLR_ALL  &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4   &none &none &none &none &none &none
+                &none           &cp C_PREV   &cp C_PP     &cp C_NEXT   &cp C_VOL_DN &cp C_VOL_UP   &none &none &none &none &none &none
+                &none           &none        &none        &none        &none        &none           &none &none &none &none &none &none
+                &none           &none        &none        &none        &none        &none  &none    &none &none &none &none &none &trans
+                                                      &trans &trans &trans &trans &trans &trans &trans &trans
             >;
-
-            
         };
 
+        // === Capa TILDE (Caracteres especiales) ===
         tilde_layer {
-// ------------------------------------------------------------------------------------------------------------
-// |       |     |     |      |      |      |                   |      |       |       |      |       |       |
-// |   `   |  1  |  2  |  3   |  4   |  5   |                   |  6   |   7   |   8   |  9   |   0   |       |
-// |   F1  |  F2 |  F3 |  F4  |  F5  |  F6  |                   |      |   <-  |   v   |  ^   |  ->   |       |
-// |   F7  |  F8 |  F9 |  F10 |  F11 |  F12 |        |  |       |  +   |   -   |   =   |  [   |   ]   |   \   |
-//                     |      |      |      |        |  |       |      |       |       |
             bindings = <
-&none    &none &none &none  &none  &none                                &none    &none &none &none  &none  &none
-&none    &none &none &none  &none  &none                                &none    &kp RA(U) &none &none  &none  &none
-&none    &kp RA(X) &kp RA(DOT) &kp RA(G)  &kp RA(J)  &kp RA(B)                 &none    &none &none &kp RA(N)  &none  &none
-&none    &none &none &none  &none  &none      &none      &none          &none    &none &none &none  &none  &trans
-                        &trans  &trans  &trans    &trans   &trans    &trans      &trans    &trans
+                &none           &none &none &none &none &none                   &none &none &none &none &none &none
+                &none           &none &none &none &none &none                   &none &kp RA(U) &none &none &none &none
+                &none           &kp RA(X) &kp RA(DOT) &kp RA(G) &kp RA(J) &kp RA(B)  &none &none &none &kp RA(N) &none &none
+                &none           &none &none &none &none &none  &none  &none      &none &none &none &none &none &trans
+                                                      &trans &trans &trans &trans &trans &trans &trans &trans
             >;
-
-           
         };
     };
 };
