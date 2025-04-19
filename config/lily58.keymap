@@ -17,13 +17,14 @@
 
 / {
     behaviors {
-        quick_release: quick_release {
+        quick_release: behavior_hold_tap {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
             tapping-term-ms = <200>;
             quick-tap-ms = <150>;
             require-prior-idle-ms = <100>;
+            bindings = <&kp>, <&kp>;
         };
         sk: sticky_key {
             release-after-ms = <200>; // Evita teclas pegadas
