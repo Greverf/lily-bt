@@ -13,7 +13,7 @@
 #define LOWER   1
 #define RAISE   2
 #define ADJUST  3
-#define TILDE   4
+#define TILDE_LAYER 4  
 
 / {
     behaviors {
