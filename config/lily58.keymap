@@ -17,13 +17,7 @@
 
 / {
     behaviors {
-        sk: sticky_key {
-            release-after-ms = <200>; // Evita teclas pegadas
-        };
-        mt: mod_tap {
-            quick-tap-ms = <180>;     // Mejora respuesta en tap-hold
-        };
-            quick_release: quick_release {
+        quick_release: quick_release {
             compatible = "zmk,behavior-hold-tap";
             #binding-cells = <2>;
             flavor = "tap-preferred";
@@ -31,6 +25,13 @@
             quick-tap-ms = <150>;
             require-prior-idle-ms = <100>;
         };
+        sk: sticky_key {
+            release-after-ms = <200>; // Evita teclas pegadas
+        };
+        mt: mod_tap {
+            quick-tap-ms = <180>;     // Mejora respuesta en tap-hold
+        };
+           
     };
 
     kscan: kscan {
