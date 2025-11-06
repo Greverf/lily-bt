@@ -17,19 +17,21 @@
 
 / {
     behaviors {
-        quick_release: behavior_hold_tap {
-            #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <200>;
-            quick-tap-ms = <150>;
-            require-prior-idle-ms = <100>;
-            bindings = <&kp>, <&kp>;
+        qht: hold_tap {
+        #binding-cells = <2>;
+        flavor = "tap-preferred";
+        tapping-term-ms = <180>;
+        quick-tap-ms = <100>;
+        require-prior-idle-ms = <150>;
+        bindings = <&kp>, <&kp>;
         };
-        sk: sticky_key {
-            release-after-ms = <200>; // Evita teclas pegadas
-        };
+    
+        // Comportamiento específico para mods
         mt: mod_tap {
-            quick-tap-ms = <180>;     // Mejora respuesta en tap-hold
+        #binding-cells = <2>;
+        flavor = "hold-preferred";
+        tapping-term-ms = <200>;
+        bindings = <&kp>, <&kp>;
         };
            
     };
@@ -62,7 +64,7 @@
                 &kp BSLH        &kp SQT &kp COMMA &kp DOT &kp P   &kp Y           &kp F   &kp G   &kp C   &kp R   &kp L   &kp FSLH
                 &kp EQUAL       &kp A   &kp O   &kp E   &kp U   &kp I             &kp D   &kp H   &kp T   &kp N   &kp S   &kp MINUS
                 &kp GRAVE       &kp SEMI &kp Q  &kp J   &kp K   &kp X  &kp LBKT  &kp RBKT &kp B   &kp M   &kp W   &kp V   &kp Z   &sl TILDE_LAYER
-                                            &kp LGUI &kp RALT &mo LOWER &kp RSHFT &kp SPACE &mo RAISE &kp LCTRL &trans
+                                            &mt LGUI LGUI &mt RALT RALT &mo LOWER &mt RSHFT RSHFT &kp SPACE &mo RAISE &mt LCTRL LCTRL &trans
             >;
         };
 
@@ -71,8 +73,8 @@
             bindings = <
                 &kp F11         &kp F1  &kp F2  &kp F3  &kp F4  &kp F5           &kp F6  &kp F7  &kp F8  &kp F9  &kp F10 &kp F12
                 &none           &kp LS(LG(T)) &kp LA(SPACE) &kp LC(F) &kp LS(LG(S)) &kp LC(Y) &kp PG_UP &kp HOME &kp UP &kp END &kp CAPS &none
-                &kp ESC         &kp LGUI &kp LALT &kp LSHFT &kp LCTRL &kp RALT     &kp PG_DN &kp LEFT &kp DOWN &kp RIGHT &kp DEL &none
-                &bt BT_CLR_ALL          &kp LC(Z) &kp LC(X) &kp LC(C) &kp TAB &kp LC(V)    &trans    &trans  &kp LC(BSPC) &kp BSPC &kp INS &kp K_APP &none &trans
+                &kp ESC &mt LGUI LGUI &mt LALT LALT &mt LSHFT LSHFT &mt LCTRL LCTRL &mt RALT RALT     &kp PG_DN &kp LEFT &kp DOWN &kp RIGHT &kp DEL &none
+                &none         &kp LC(Z) &kp LC(X) &kp LC(C) &kp TAB &kp LC(V)    &trans    &trans  &kp LC(BSPC) &kp BSPC &kp INS &kp K_APP &none &trans
                                                       &trans &trans &trans &trans &kp ENTER &trans &trans &trans
             >;
         };
